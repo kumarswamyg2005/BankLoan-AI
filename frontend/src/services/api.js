@@ -5,7 +5,7 @@ const BASE = rawBase
   ? rawBase.replace(/\/+$/, "")
   : import.meta.env.DEV
     ? "http://localhost:8000/api"
-    : "/_/backend/api";
+    : "/api";
 
 export const uploadCSV = (file) => {
   const form = new FormData();

@@ -132,7 +132,10 @@ After deploy, copy your backend URL, for example:
 
 ### 2) Deploy frontend on Vercel
 
-In Vercel, import this repo and set **Root Directory** to `frontend`.
+This repo includes a root `vercel.json` that deploys **frontend only** via `experimentalServices`:
+
+- frontend entrypoint: `frontend`
+- framework: `vite`
 
 Set Vercel environment variable:
 
@@ -143,16 +146,10 @@ Deploy, then verify:
 - Frontend loads and can call `/api/train/status`
 - Prediction works from `/predict`
 
-### 3) About `experimentalServices`
+### 3) Why your previous Vercel build failed
 
-As requested, this repo includes a root `vercel.json` with:
-
-- frontend entrypoint: `frontend`
-- backend entrypoint: `backend`
-- backend routePrefix: `/_/backend`
-
-For your **current Render backend setup**, still set `VITE_API_BASE_URL` to the Render URL.
-If you later host backend via Vercel services, `/_/backend/api` fallback is already supported in frontend API config.
+If `vercel.json` also includes a backend service entrypoint, Vercel tries to build Python dependencies from `backend/requirements.txt`.
+For a **Render backend architecture**, keep Vercel frontend-only and use `VITE_API_BASE_URL` to call Render.
 
 ## Typical workflow
 
