@@ -5,7 +5,10 @@ import joblib
 
 def compat_load(path):
     """Load a joblib pkl saved in Kaggle notebook context (__mp_main__)."""
-    from services.preprocessor import LoanPreprocessor
+    try:
+        from services.preprocessor import LoanPreprocessor
+    except ModuleNotFoundError:
+        from backend.services.preprocessor import LoanPreprocessor
 
     for mod_name in ('__mp_main__', '__main__'):
         if mod_name not in sys.modules:

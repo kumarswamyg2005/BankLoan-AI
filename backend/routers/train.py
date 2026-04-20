@@ -13,8 +13,12 @@ _trained_at: datetime | None = None
 async def train_model():
     global _trained_at
     try:
-        from services.trainer import ModelTrainer
-        from services.predictor import reset_predictor_cache
+        try:
+            from services.trainer import ModelTrainer
+            from services.predictor import reset_predictor_cache
+        except ModuleNotFoundError:
+            from backend.services.trainer import ModelTrainer
+            from backend.services.predictor import reset_predictor_cache
         metrics = ModelTrainer().train()
         reset_predictor_cache()
         _trained_at = datetime.utcnow()

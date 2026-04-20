@@ -14,7 +14,10 @@ from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 
-from services.preprocessor import LoanPreprocessor
+try:
+    from services.preprocessor import LoanPreprocessor
+except ModuleNotFoundError:
+    from backend.services.preprocessor import LoanPreprocessor
 
 BASE_DIR = os.path.dirname(__file__)
 DATA_PATH = os.path.join(BASE_DIR, '..', 'data', 'cs-training.csv')

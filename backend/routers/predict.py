@@ -59,7 +59,10 @@ async def predict_loan(customer: CustomerInput, track: bool = Query(True)):
             detail='Models not trained yet. Call POST /api/train first.'
         )
     try:
-        from services.predictor import get_predictor
+        try:
+            from services.predictor import get_predictor
+        except ModuleNotFoundError:
+            from backend.services.predictor import get_predictor
         customer_data = customer.model_dump()
         result = get_predictor().predict(customer_data)
         if track:

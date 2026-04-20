@@ -5,9 +5,14 @@ import pandas as pd
 import joblib
 import shap
 
-from services.preprocessor import LoanPreprocessor
-from services.ood_detector import OODDetector
-from utils.compat_unpickler import compat_load
+try:
+    from services.preprocessor import LoanPreprocessor
+    from services.ood_detector import OODDetector
+    from utils.compat_unpickler import compat_load
+except ModuleNotFoundError:
+    from backend.services.preprocessor import LoanPreprocessor
+    from backend.services.ood_detector import OODDetector
+    from backend.utils.compat_unpickler import compat_load
 
 MODELS_DIR = os.path.join(os.path.dirname(__file__), '..', 'models')
 _PREDICTOR = None

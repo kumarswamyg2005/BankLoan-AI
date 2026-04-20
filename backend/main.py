@@ -2,7 +2,10 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import train, predict, analytics, upload
+try:
+    from routers import train, predict, analytics, upload
+except ModuleNotFoundError:
+    from backend.routers import train, predict, analytics, upload
 
 app = FastAPI(title='BankLoan AI API', version='1.0.0')
 
@@ -35,7 +38,10 @@ async def startup():
         data_path = os.path.join(os.path.dirname(__file__), 'data', 'cs-training.csv')
         if os.path.exists(data_path):
             print('Auto-training models on startup...')
-            from services.trainer import ModelTrainer
+            try:
+                from services.trainer import ModelTrainer
+            except ModuleNotFoundError:
+                from backend.services.trainer import ModelTrainer
             try:
                 ModelTrainer().train()
                 print('Models trained successfully.')

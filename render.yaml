@@ -4,8 +4,8 @@ services:
     env: python
     rootDir: backend
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: bash -lc 'if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install -r backend/requirements.txt; fi'
+    startCommand: bash -lc 'if [ -f main.py ]; then python -m uvicorn main:app --host 0.0.0.0 --port $PORT; else python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT; fi'
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
