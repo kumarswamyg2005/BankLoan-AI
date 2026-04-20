@@ -7,10 +7,13 @@ from routers import train, predict, analytics, upload
 app = FastAPI(title='BankLoan AI API', version='1.0.0')
 
 _origins = os.getenv('ALLOWED_ORIGINS')
-allowed_origins = [o.strip() for o in _origins.split(',')] if _origins else [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-]
+if _origins:
+    allowed_origins = [o.strip() for o in _origins.split(',') if o.strip()]
+else:
+    allowed_origins = [
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+    ]
 
 app.add_middleware(
     CORSMiddleware,

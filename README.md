@@ -106,6 +106,54 @@ VITE_API_BASE_URL=http://localhost:8000/api
 ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
+## Deploy: Frontend on Vercel + Backend on Render
+
+This repository is configured for the exact split you asked for:
+
+- **Frontend**: Vercel
+- **Backend**: Render
+
+### 1) Deploy backend on Render
+
+Use the included `render.yaml` (Blueprint) or configure manually:
+
+- Root directory: `backend`
+- Build command: `pip install -r requirements.txt`
+- Start command: `python -m uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Health check path: `/health`
+
+Set Render environment variable:
+
+- `ALLOWED_ORIGINS=https://<your-vercel-domain>.vercel.app`
+
+After deploy, copy your backend URL, for example:
+
+- `https://bankloan-ai-backend.onrender.com`
+
+### 2) Deploy frontend on Vercel
+
+In Vercel, import this repo and set **Root Directory** to `frontend`.
+
+Set Vercel environment variable:
+
+- `VITE_API_BASE_URL=https://<your-render-backend>.onrender.com/api`
+
+Deploy, then verify:
+
+- Frontend loads and can call `/api/train/status`
+- Prediction works from `/predict`
+
+### 3) About `experimentalServices`
+
+As requested, this repo includes a root `vercel.json` with:
+
+- frontend entrypoint: `frontend`
+- backend entrypoint: `backend`
+- backend routePrefix: `/_/backend`
+
+For your **current Render backend setup**, still set `VITE_API_BASE_URL` to the Render URL.
+If you later host backend via Vercel services, `/_/backend/api` fallback is already supported in frontend API config.
+
 ## Typical workflow
 
 1. Start backend + frontend

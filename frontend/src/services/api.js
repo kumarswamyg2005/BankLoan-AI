@@ -3,7 +3,9 @@ import axios from "axios";
 const rawBase = import.meta.env.VITE_API_BASE_URL?.trim();
 const BASE = rawBase
   ? rawBase.replace(/\/+$/, "")
-  : "http://localhost:8000/api";
+  : import.meta.env.DEV
+    ? "http://localhost:8000/api"
+    : "/_/backend/api";
 
 export const uploadCSV = (file) => {
   const form = new FormData();
