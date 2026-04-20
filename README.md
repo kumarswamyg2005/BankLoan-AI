@@ -118,8 +118,8 @@ This repository is configured for the exact split you asked for:
 Use the included `render.yaml` (Blueprint) or configure manually:
 
 - Root directory: `backend`
-- Build command: `pip install -r requirements.txt`
-- Start command: `python -m uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Build command: `python -m pip install --upgrade pip && python -m pip install -r requirements.txt`
+- Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 - Health check path: `/health`
 
 Set Render environment variable:
@@ -150,6 +150,24 @@ Deploy, then verify:
 
 If `vercel.json` also includes a backend service entrypoint, Vercel tries to build Python dependencies from `backend/requirements.txt`.
 For a **Render backend architecture**, keep Vercel frontend-only and use `VITE_API_BASE_URL` to call Render.
+
+### 4) Render troubleshooting (`No module named uvicorn`)
+
+If Render logs show:
+
+- `Done in 0.03s` during build
+- `/usr/bin/python: No module named uvicorn` during start
+
+then your backend service is usually not running with Python dependencies installed.
+
+Fix in Render dashboard:
+
+1. Ensure service **Environment = Python**
+2. Ensure **Root Directory = backend**
+3. Set Build/Start commands exactly as above
+4. Clear build cache and redeploy latest commit
+
+If the service was originally created with wrong runtime settings, create a new service from `render.yaml` Blueprint.
 
 ## Typical workflow
 
