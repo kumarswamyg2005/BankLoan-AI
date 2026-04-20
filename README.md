@@ -117,10 +117,9 @@ This repository is configured for split deployment:
 
 Use the included `render.yaml` (Blueprint) or configure manually:
 
-- Service type: Web Service (Python)
-- Root directory: `backend`
-- Build command: `python -m pip install --upgrade pip && python -m pip install -r requirements.txt`
-- Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Service type: Web Service (Docker)
+- Dockerfile path: `backend/Dockerfile`
+- Docker context: repository root (`.`)
 - Health check path: `/health`
 
 Set backend env var:
@@ -146,21 +145,20 @@ Deploy and verify:
 - Frontend loads from Vercel URL
 - Frontend API calls go to Render `/api/...`
 
-### 3) If backend deploy fails (`No module named uvicorn`)
+### 3) If backend deploy fails (`libgomp.so.1` or `No module named uvicorn`)
 
 If Render logs show:
 
-- `Done in 0.03s` during build
-- `/usr/bin/python: No module named uvicorn` during start
+- `libgomp.so.1: cannot open shared object file`
+- `/usr/bin/python: No module named uvicorn`
 
 then service/runtime settings are likely wrong.
 
 Fix in Render dashboard:
 
-1. Ensure service **Environment = Python**
-2. Ensure **Root Directory = backend**
-3. Set Build/Start commands exactly as above
-4. Clear build cache and redeploy latest commit
+1. Ensure service **Environment = Docker**
+2. Ensure Dockerfile path is **`backend/Dockerfile`**
+3. Clear build cache and redeploy latest commit
 
 ## Typical workflow
 
