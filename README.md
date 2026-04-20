@@ -106,68 +106,43 @@ VITE_API_BASE_URL=http://localhost:8000/api
 ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 ```
 
-## Deploy: Frontend on Vercel + Backend on Render
+## Deploy fully on Render (single service)
 
-This repository is configured for the exact split you asked for:
+This repo now supports **frontend + backend in one Render web service**.
 
-- **Frontend**: Vercel
-- **Backend**: Render
+- Frontend is built with Vite during image build
+- Backend serves API + static frontend from one FastAPI process
+- Single runtime command inside container:
+  - `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`
 
-### 1) Deploy backend on Render
+### 1) Deploy from Blueprint
 
-Use the included `render.yaml` (Blueprint) or configure manually:
+1. In Render, create a new service from this repository using `render.yaml`
+2. Render will use the included `Dockerfile`
+3. Deploy latest commit
 
-- Root directory: `backend`
-- Build command: `python -m pip install --upgrade pip && python -m pip install -r requirements.txt`
-- Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- Health check path: `/health`
+### 2) Required environment variable
 
-Set Render environment variable:
+Set in Render service:
 
-- `ALLOWED_ORIGINS=https://<your-vercel-domain>.vercel.app`
+- `ALLOWED_ORIGINS=https://<your-render-domain>.onrender.com`
 
-After deploy, copy your backend URL, for example:
+For same-domain frontend/backend on Render, this can also be left at defaults.
 
-- `https://bankloan-ai-backend.onrender.com`
+### 3) Verify deployment
 
-### 2) Deploy frontend on Vercel
+- `https://<your-render-domain>.onrender.com/health`
+- `https://<your-render-domain>.onrender.com/` (frontend)
+- Frontend requests should call same-origin `/api/...`
 
-This repo includes a root `vercel.json` that deploys **frontend only** via `experimentalServices`:
+### 4) If deployment still fails
 
-- frontend entrypoint: `frontend`
-- framework: `vite`
+Open Render logs and check:
 
-Set Vercel environment variable:
+- image build completed successfully
+- container start line includes `uvicorn backend.main:app`
 
-- `VITE_API_BASE_URL=https://<your-render-backend>.onrender.com/api`
-
-Deploy, then verify:
-
-- Frontend loads and can call `/api/train/status`
-- Prediction works from `/predict`
-
-### 3) Why your previous Vercel build failed
-
-If `vercel.json` also includes a backend service entrypoint, Vercel tries to build Python dependencies from `backend/requirements.txt`.
-For a **Render backend architecture**, keep Vercel frontend-only and use `VITE_API_BASE_URL` to call Render.
-
-### 4) Render troubleshooting (`No module named uvicorn`)
-
-If Render logs show:
-
-- `Done in 0.03s` during build
-- `/usr/bin/python: No module named uvicorn` during start
-
-then your backend service is usually not running with Python dependencies installed.
-
-Fix in Render dashboard:
-
-1. Ensure service **Environment = Python**
-2. Ensure **Root Directory = backend**
-3. Set Build/Start commands exactly as above
-4. Clear build cache and redeploy latest commit
-
-If the service was originally created with wrong runtime settings, create a new service from `render.yaml` Blueprint.
+Then share the first Python traceback block for precise debugging.
 
 ## Typical workflow
 

@@ -1,14 +1,10 @@
 services:
   - type: web
-    name: bankloan-ai-backend
-    env: python
-    rootDir: backend
+    name: bankloan-ai-fullstack
+    env: docker
     plan: free
-    buildCommand: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.9
       - key: ALLOWED_ORIGINS
         sync: false
