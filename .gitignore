@@ -1,0 +1,35 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+backend/.venv/
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Environment files
+.env
+.env.*
+!.env.example
+frontend/.env
+backend/.env
+
+# Logs / runtime artifacts
+*.log
+backend/models/predictions_log.json
+
+# Duplicate local model exports (not used by backend runtime)
+bankloan_models/

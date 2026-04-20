@@ -1,0 +1,31 @@
+{
+  "test_auc": 0.8364,
+  "gini": 0.6728,
+  "ks": 0.5349,
+  "precision": 0.1381,
+  "recall": 0.8693,
+  "f1": 0.2383,
+  "confusion_matrix": {
+    "TP": 1743,
+    "FP": 10878,
+    "TN": 17117,
+    "FN": 262
+  },
+  "feature_importances": {
+    "IncomePerDependent": 1717,
+    "age": 1694,
+    "MonthlyIncome": 1619,
+    "RevolvingUtilizationOfUnsecuredLines": 1569,
+    "DebtToIncome": 1537,
+    "DebtRatio": 1477,
+    "NumberOfOpenCreditLinesAndLoans": 1130,
+    "LatePaymentTotal": 931,
+    "NumberOfTime30-59DaysPastDueNotWorse": 752,
+    "AgeGroup": 621,
+    "NumberRealEstateLoansOrLines": 527,
+    "NumberOfTimes90DaysLate": 524,
+    "NumberOfTime60-89DaysPastDueNotWorse": 468,
+    "NumberOfDependents": 434,
+    "CreditUtilizationRisk": 0
+  }
+}
